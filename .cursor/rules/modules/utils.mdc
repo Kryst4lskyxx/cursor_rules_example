@@ -1,0 +1,20 @@
+# Utilities
+
+## Basic Requirements
+- Pure, stateless helpers; no hidden I/O or globals
+- Prefer small, focused utilities over catch-all grab bags
+
+## Mandatory Actions
+- Provide clear names and documented contracts; include edge-case tests
+- Avoid premature optimization; measure before micro-optimizing
+
+## Forbidden Behaviors
+- Mutating inputs; surprising type coercions
+- Exporting default objects with many methods; prefer named functions
+
+## Example Code
+```ts
+export function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+```

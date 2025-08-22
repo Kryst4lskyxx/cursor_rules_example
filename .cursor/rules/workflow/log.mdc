@@ -1,0 +1,19 @@
+# Logging Workflow
+
+## Basic Requirements
+- Use structured logs with level, timestamp, context (requestId, userId, operation)
+- Redact PII and secrets; follow data retention policies
+
+## Mandatory Actions
+- Log start, success, and failure with durations on critical operations
+- Include correlation IDs across services; prefer JSON log format
+- Provide logger adapters for browser/node; avoid `console.*` in production
+
+## Forbidden Behaviors
+- Logging sensitive data (tokens, passwords, full card numbers)
+- Blocking logging I/O on critical paths
+
+## Example Code
+```ts
+logger.info({ operation: 'fetchProduct', requestId, durationMs }, 'product fetched');
+```

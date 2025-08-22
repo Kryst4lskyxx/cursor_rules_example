@@ -1,0 +1,21 @@
+# Hooks
+
+## Basic Requirements
+- Hook names must start with `use`; encapsulate one responsibility
+- Accept typed inputs; return stable shapes; minimize re-renders via memoization
+
+## Mandatory Actions
+- Expose loading/error/data tri-state; support cancellation
+- Provide dependency arrays and document assumptions for effects
+- Use state machines or reducers when branching grows
+
+## Forbidden Behaviors
+- Conditionally calling hooks; returning non-deterministic shapes
+- Hidden network requests without clear API
+
+## Example Code
+```ts
+export function useProduct(id: string) {
+  // fetch with abort, return { data, error, loading }
+}
+```

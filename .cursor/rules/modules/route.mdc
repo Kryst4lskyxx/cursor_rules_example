@@ -1,0 +1,17 @@
+# Routing
+
+## Basic Requirements
+- Define typed route params and query schemas
+- Keep navigation side effects explicit and reversible (back/forward safe)
+
+## Mandatory Actions
+- Centralize route names/paths; generate helpers for links
+- Guard protected routes; handle unauthorized and not-found states
+
+## Forbidden Behaviors
+- Hardcoding paths across components; constructing URLs via string concat
+
+## Example Code
+```ts
+export const route = { product: (id: string) => `/products/${id}` };
+```

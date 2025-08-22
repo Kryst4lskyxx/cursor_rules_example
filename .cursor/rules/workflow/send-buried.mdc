@@ -1,0 +1,19 @@
+# Analytics & Event Tracking Workflow
+
+## Basic Requirements
+- Centralize event schemas (name, version, required props); validate before send
+- Asynchronous, non-blocking delivery; batch where possible
+
+## Mandatory Actions
+- Use semantic event names with domain prefixes (e.g., `product.viewed`)
+- Include device/user/session identifiers where legal; honor consent and privacy
+- Retry transient failures with backoff; drop or queue offline safely
+
+## Forbidden Behaviors
+- Sending PII without hashing or consent; leaking secrets
+- Tying UI rendering to tracking completion
+
+## Example Code
+```ts
+track('product.viewed', { productId, price, currency });
+```

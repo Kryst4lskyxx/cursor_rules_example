@@ -1,0 +1,24 @@
+# Services (API/Domain)
+
+## Basic Requirements
+- Separate transport (fetch/axios) from domain mapping
+- Centralize base URL, headers, and retries; inject via factory
+- Types for DTOs vs domain models; explicit converters
+
+## Mandatory Actions
+- Add timeouts, retry (idempotent only), and circuit-breaker thresholds
+- Map errors to typed domain errors with operation context
+- Log correlation IDs and request duration; redact secrets
+
+## Forbidden Behaviors
+- Inline fetch logic in UI; scattering base URLs across code
+- Returning raw HTTP responses to UI layers
+
+## Example Code
+```ts
+export function createProductService(client: HttpClient) {
+  return {
+    async getById(id: string): Promise<Product> { /* ... */ },
+  };
+}
+```

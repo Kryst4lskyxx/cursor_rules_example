@@ -1,0 +1,17 @@
+# Constants
+
+## Basic Requirements
+- Group constants by domain; avoid magic numbers/strings
+- Use `as const` for literal unions and enums
+
+## Mandatory Actions
+- Prefix env-derived constants clearly; validate at startup
+- Document units (ms, s, bytes) in names or comments
+
+## Forbidden Behaviors
+- Cross-layer imports that create cycles; mutable exported constants
+
+## Example Code
+```ts
+export const FETCH_TIMEOUT_MS = 10_000 as const;
+```

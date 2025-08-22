@@ -1,0 +1,33 @@
+# Project Basics
+
+## Basic Requirements
+- Standard directories: `src/`, `tests/`, `public/`, `.cursor/rules/`
+- Branches: `main` (protected), `develop`, `feature/*`, `fix/*`, `hotfix/*`
+- Conventional Commits for messages: `type(scope): summary`
+- Provide `.env.example` and a typed config module; never use raw `process.env` outside config
+- CI must run build, lint, tests on PRs; no warnings allowed
+
+## Mandatory Actions
+- Document decisions in `README` or ADRs; update when behavior or public APIs change
+- Keep PRs focused (< 300 lines net diff when possible) and include tests
+- Add `CODEOWNERS` for critical paths
+- Generate minimal repro and logs for defects; link to issue tracker
+
+## Forbidden Behaviors
+- Direct commits to `main`; force-push to shared branches
+- Unscoped or ambiguous commits; mixing unrelated changes in one PR
+- Non-deterministic builds; missing lockfiles; using machine-specific paths
+- Hardcoding secrets/keys; reading envs outside the config layer
+
+## Example Code
+```text
+feat(routing): add product details route with lazy loading
+
+BREAKING CHANGE: product URL changed to /products/:id
+```
+
+```env
+# .env.example
+API_BASE_URL=https://api.example.com
+LOG_LEVEL=info
+```

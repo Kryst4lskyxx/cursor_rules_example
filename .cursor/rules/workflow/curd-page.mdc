@@ -1,0 +1,25 @@
+# CRUD Page Workflow
+
+## Basic Requirements
+- Standardize CRUD pages: filter/search, table/list, detail drawer/modal, create/edit form
+- Separate data layer (service) from presentation; schema-drive forms and tables
+
+## Mandatory Actions
+- Define columns: visible/hidden, pinned, alignment (text left, numbers right, enums center)
+- Pagination: 10/20/50/100 options; preserve state in URL
+- Forms: client-side validation + server-side error surfacing; optimistic updates only when safe
+- Internationalization: extract labels and messages; avoid inline literals
+
+## Forbidden Behaviors
+- Overloaded action columns; more than two primary actions visible without collapse
+- Fetching in components without cancellation; missing empty/loading/error states
+
+## Example Code
+```ts
+// columns config
+export const columns = [
+  { key: 'name', title: 'Name', align: 'left' },
+  { key: 'price', title: 'Price', align: 'right' },
+  { key: 'status', title: 'Status', align: 'center' },
+];
+```

@@ -1,0 +1,27 @@
+# Components
+
+## Basic Requirements
+- Presentational and container separation where beneficial; keep components small and focused
+- Props must be explicitly typed; avoid implicit any and wide unions
+- Accessibility first: keyboard nav, ARIA roles, focus management
+
+## Mandatory Actions
+- Prefer composition over inheritance; expose slots/children for flexibility
+- Memoize expensive subtrees; use `React.memo` or `useMemo` appropriately
+- Handle loading/empty/error states explicitly with dedicated UI
+
+## Forbidden Behaviors
+- Side effects in render; mutable default props; hidden global state
+- Coupling components to fetch logic without an abstraction layer
+
+## Example Code
+```tsx
+export function EmptyState({ title, action }: { title: string; action?: React.ReactNode }) {
+  return (
+    <section role="status" aria-live="polite">
+      <h2>{title}</h2>
+      {action}
+    </section>
+  );
+}
+```

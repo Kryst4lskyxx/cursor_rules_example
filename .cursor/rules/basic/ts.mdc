@@ -1,0 +1,32 @@
+# TypeScript Rules
+
+## Basic Requirements
+- Enable strict mode: `strict: true`, `noImplicitAny`, `strictNullChecks`
+- Disallow `any` for exported APIs; prefer precise types and narrowing
+- Use discriminated unions and `never` exhaustiveness checks for branching
+- Public APIs and props must be explicitly typed; avoid inference leaks across boundaries
+
+## Mandatory Actions
+- Define DTOs and domain models; separate external and internal types
+- Prefer `unknown` over `any`; narrow before use
+- Avoid non-null assertions; handle nullability explicitly
+- Use `readonly` for constants and immutable structures
+- Export factory functions or builders instead of exposing mutable objects
+
+## Forbidden Behaviors
+- Casting to `any` or using `as unknown as X` to bypass the type system
+- Re-exporting third-party types as-is without a compatibility layer
+- Mixing CommonJS and ESM without clear boundaries
+
+## Example Code
+```ts
+export type Result<T> = { ok: true; value: T } | { ok: false; error: Error };
+
+export function parsePrice(input: unknown): Result<number> {
+  if (typeof input === 'string') {
+    const value = Number(input);
+    if (!Number.isNaN(value)) return { ok: true, value };
+  }
+  return { ok: false, error: new Error('Invalid price') };
+}
+```

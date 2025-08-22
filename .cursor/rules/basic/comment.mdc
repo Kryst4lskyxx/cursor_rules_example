@@ -1,0 +1,25 @@
+# Commenting Rules
+
+## Basic Requirements
+- Write JSDoc for public functions, classes, and React components
+- Include file header for modules with purpose, ownership, and key invariants
+- Prefer explaining "why" over "what"; keep comments current with code
+
+## Mandatory Actions
+- Document side effects, concurrency expectations, and error semantics
+- Use TODO only for short-lived follow-ups with an issue link
+- Document environment variables in `README` and `.env.example`
+
+## Forbidden Behaviors
+- Redundant comments that restate code; outdated or misleading comments
+- Large blocks of commented-out code in source files
+
+## Example Code
+```ts
+/**
+ * Parses a price string to a number.
+ * - Returns a domain error on invalid input (no throw).
+ * - Pure and side-effect free.
+ */
+export function parsePrice(value: string): Result<number> { /* ... */ }
+```

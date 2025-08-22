@@ -1,0 +1,21 @@
+# Styles and CSS Rules
+
+## Basic Requirements
+- Prefer CSS Modules or CSS-in-JS with static extraction when possible
+- Co-locate component styles with components; avoid global selectors
+- Use design tokens for spacing, color, and typography
+
+## Mandatory Actions
+- Keep specificity low; prefer composition over `!important`
+- Use semantic class names tied to roles/variants (e.g., `button--primary`)
+- Provide focus states and adhere to WCAG 2.1 AA
+
+## Forbidden Behaviors
+- Global resets that affect third-party widgets; leaking styles across boundaries
+- Animations that block main thread or reduce accessibility without opt-out
+
+## Example Code
+```css
+.button { padding: var(--space-3); }
+.button--primary { background: var(--color-primary); }
+```

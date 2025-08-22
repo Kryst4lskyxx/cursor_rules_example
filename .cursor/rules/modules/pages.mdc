@@ -1,0 +1,19 @@
+# Pages
+
+## Basic Requirements
+- Pages orchestrate data fetching, routing params, and layout composition
+- Keep business logic in hooks/services; keep pages thin
+
+## Mandatory Actions
+- SSR/SSG/CSR decisions must be explicit with rationale
+- Split code by route; lazy-load heavy widgets
+- Validate route params and query; handle 404/403/500 gracefully
+
+## Forbidden Behaviors
+- Mixing page-level data concerns with low-level component state
+- Blocking synchronous calls in route loaders or actions without timeouts
+
+## Example Code
+```tsx
+export default function ProductPage() { /* compose hooks + components */ }
+```

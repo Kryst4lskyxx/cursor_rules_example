@@ -1,0 +1,28 @@
+# Linting & Formatting
+
+## Basic Requirements
+- ESLint + Prettier enforced in CI; no warnings in PRs
+- Use TypeScript ESLint with strict recommended configs
+- Style and import order automated; do not hand-format
+
+## Mandatory Actions
+- Add project-wide `.editorconfig` and consistent end-of-line settings
+- Enable `no-explicit-any`, `no-floating-promises`, `no-unused-vars`
+- Enable `import/no-cycle`, `import/order`, and `eslint-plugin-security`
+
+## Forbidden Behaviors
+- Disabling rules without justification and scope (file- or line-level)
+- Committing with lint errors or format diffs
+
+## Example Config
+```json
+{
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/strict", "prettier"],
+  "plugins": ["@typescript-eslint", "import", "security"],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-floating-promises": "error",
+    "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+  }
+}
+```

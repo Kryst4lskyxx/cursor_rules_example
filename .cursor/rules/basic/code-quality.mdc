@@ -1,0 +1,32 @@
+# Code Quality
+
+## Basic Requirements
+- Keep modules cohesive and loosely coupled; prefer pure functions where possible
+- Enforce measurable budgets: function length ≤ 60 lines; file size ≤ 500 lines; cyclomatic complexity ≤ 10
+- Security-by-default: HTTPS-only, input validation, secret management, dependency hygiene
+- Observability: structured logs, metrics, and traces for critical paths
+
+## Mandatory Actions
+- Validate and sanitize all external input; use schemas where available
+- Use HTTPS for all network calls; enable TLS verification
+- Handle errors explicitly; map low-level errors to domain errors with context
+- Add timeouts and cancellation (e.g., AbortController) to I/O calls
+- Use exponential backoff with jitter only for idempotent operations
+- Redact sensitive fields in logs; attach correlation/request IDs
+
+## Forbidden Behaviors
+- Swallowing errors or using broad catch without handling
+- `console.log` in production code; use a typed logger
+- `eval`, dynamic `Function`, unsafe regex, or disabling security linters
+- Blocking synchronous I/O on UI threads; long-running loops without yielding
+- Writing secrets to logs or source control
+
+## Example Code
+```ts
+try {
+  const response = await client.get(url, { signal });
+  return parse(response);
+} catch (error) {
+  throw mapToDomainError(error, { operation: 'fetchProduct', url });
+}
+```
