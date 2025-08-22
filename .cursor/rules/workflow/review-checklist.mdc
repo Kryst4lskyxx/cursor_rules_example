@@ -1,0 +1,63 @@
+# Code Review Checklist (代码之丑 → Cursor Rules)
+
+## Basic Requirements
+- Review for correctness, clarity, safety, maintainability, and testability before performance
+- Keep PRs focused and within size budgets; require passing CI (build, lint, tests) and coverage
+- Ensure naming communicates intent and is consistent with existing terminology
+
+## Mandatory Actions
+- Scope & Risk
+  - Is the change minimal and reversible? Are risky changes split and covered by tests?
+  - Are migrations/backfills gated, idempotent, and observable?
+- Code Smells (see mdc:basic/code-smells.mdc)
+  - Duplication removed; no magic literals; acceptable nesting/complexity
+  - No long parameter lists or boolean flags propagating through layers
+  - No God classes/methods; responsibilities are clear; boundaries respected
+- Errors & Observability (see mdc:basic/code-quality.mdc, mdc:workflow/log.mdc)
+  - Explicit error handling; domain mapping; no swallowed exceptions
+  - Structured logs with correlation IDs; secrets redacted
+- Interfaces & Dependencies
+  - Public APIs/types documented; breaking changes called out in the PR description
+  - Dependencies are injected; no new global mutable state
+- Security & Data
+  - Inputs validated; outputs sanitized; safe SQL/NoSQL queries and escaping
+  - PII handling follows policy; no secrets in code or logs
+- Tests & Docs
+  - Unit/integration tests added or updated; happy and unhappy paths covered
+  - README/ADRs updated if behavior or public contract changes
+
+## Forbidden Behaviors
+- Approving PRs with failing CI or without adequate tests for changed behavior
+- Large unrelated changes bundled together; drive-by refactors without tests
+- Introducing cross-module knowledge leaks or cyclic dependencies
+- Using `console.*` in production code; adding logs without structure/context
+- Relying on manual QA for correctness of core logic
+
+## Exceptions and Special Cases
+- Trivial non-functional edits (comments, spelling) may skip tests but must pass lint/build
+- Emergency hotfixes can bypass some gates, but require immediate postmortem and follow-up PR to add tests and cleanup
+- Auto-generated code may be exempt from some style rules if tooling controls output
+
+## Example PR Template
+```md
+### What & Why
+Describe the behavior change and motivation.
+
+### How
+Key design choices, trade-offs, and alternatives considered.
+
+### Tests
+- [ ] Unit
+- [ ] Integration
+- [ ] Manual steps (if any)
+
+### Risks & Rollout
+- Migrations/flags/rollbacks
+- Monitoring/alerts
+
+### Checklist
+- [ ] No duplication, no magic literals, acceptable complexity
+- [ ] Errors mapped, logs structured, secrets safe
+- [ ] Public APIs documented, ADR/README updated
+```
+

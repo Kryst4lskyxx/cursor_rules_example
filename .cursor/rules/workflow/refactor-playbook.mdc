@@ -1,0 +1,44 @@
+# Refactor Playbook (Strangler-Friendly)
+
+## Basic Requirements
+- Preserve behavior; make small, safe, reversible steps with green tests between each
+- Prefer improving structure before optimizing performance; profile to justify risk
+- Record intent and constraints in the PR description; avoid noisy, wide diffs
+
+## Mandatory Actions
+- Safety Net
+  - Add/extend characterization tests around the behavior to be preserved
+  - Establish logging/metrics to catch regressions in production if applicable
+- Decompose
+  - Extract functions/classes by intention-revealing names
+  - Introduce value objects to replace data clumps and primitives
+  - Invert deeply nested conditionals with guard clauses; separate query vs command
+- Isolate Dependencies
+  - Wrap unstable/third-party calls behind interfaces; inject dependencies
+  - Add adapters/ports; keep domain free of I/O concerns
+- Replace Structures
+  - Replace long switch with strategy/polymorphism when variants are stable
+  - Break God classes/modules along capability and dependency lines
+- Migrate Gradually
+  - Use the Strangler pattern: dual-run or branch-by-abstraction; cut over behind a flag
+  - Remove dead code and flags promptly after full rollout
+
+## Forbidden Behaviors
+- Big-bang rewrites without tests or incremental rollout plan
+- Refactors that change behavior silently; mixing unrelated refactors with feature changes
+- Introducing global mutable state to “simplify” wiring
+
+## Exceptions and Special Cases
+- Hotfixes may temporarily take the shortest safe path; follow up with proper refactor
+- Legacy modules under active rewrite may exceed budgets during the window; document and timebox
+
+## Example Sequence
+```text
+1) Add tests around calculateInvoice
+2) Extract Money value object; replace primitive pairs (amount, currency)
+3) Introduce PricingStrategy interface; move per-country logic into implementations
+4) Inject strategy via factory; keep default behavior
+5) Remove old switch; add metrics for strategy selection
+6) Delete dead code; update docs
+```
+

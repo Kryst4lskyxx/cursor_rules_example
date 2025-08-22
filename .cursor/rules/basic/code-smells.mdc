@@ -1,0 +1,79 @@
+# Code Smells and Refactoring Rules
+
+## Basic Requirements
+- Identify and eliminate code smells early; prefer small, composable units with clear responsibilities
+- Keep behavior unchanged during refactoring; rely on characterization tests to guard changes
+- Use budgets as smell thresholds: function length ≤ 60 lines, file size ≤ 500 lines, nesting depth ≤ 3, cyclomatic complexity ≤ 10
+- Prefer composition over inheritance; avoid cross-module leakage and knowledge of internals
+- Replace implicit conventions with explicit types, value objects, and named abstractions
+
+## Mandatory Actions
+- Remove duplication: extract function/module; DRY across files and layers
+- Replace magic numbers/strings with named constants or enums; centralize domain constants (see mdc:modules/constants.mdc)
+- Shorten long functions: extract by intention; use guard clauses; separate queries from modifiers
+- Reduce long parameter lists (≥ 6): introduce parameter objects/options; pass cohesive data structures
+- Flatten deep nesting (> 3): invert conditions; early return; split into smaller functions
+- Avoid boolean parameters: prefer enums/options; ensure self-descriptive call sites
+- Eliminate data clumps: introduce value objects; co-locate behavior with data
+- Cure primitive obsession: use domain types for identifiers, money, URLs, timestamps, etc.
+- Break God classes/modules: split by capability and dependency direction; enforce boundaries
+- Replace large conditionals with polymorphism/strategy when branches represent stable variants
+- Stop feature envy: move behavior next to the data it uses most; respect the Law of Demeter
+- Encapsulate mutable state; no shared global mutable singletons; inject dependencies explicitly
+- Handle errors explicitly: map infrastructure errors to domain errors with context (see mdc:basic/code-quality.mdc)
+- Add timeouts, cancellation, and retries only for idempotent operations (with jitter)
+- Sanitize and validate inputs at boundaries; never trust external data
+- Replace ad-hoc logging with structured logging and correlation IDs (see mdc:workflow/log.mdc)
+- Delete dead code, commented-out blocks, and unused feature flags promptly
+- Document intent with names; prefer code that explains itself over excessive comments (see mdc:basic/comment.mdc)
+
+## Forbidden Behaviors
+- Copy-paste duplication across modules/services without abstraction or tests
+- Magic literals in production logic; hidden protocol strings; hard-coded paths and secrets
+- Functions exceeding budgets without justification; deeply nested control flow; long switch ladders
+- Boolean flags controlling behavior across many call sites; negative/ambiguous naming
+- Returning `null`/`undefined` for exceptional states; swallowing or broad-catching exceptions
+- Global mutable state, hidden side effects, and temporal coupling without sequencing constraints
+- Cross-layer knowledge leaks (UI knowing DB schema; service accessing view internals)
+- Cyclic dependencies between modules; reaching through multiple objects (train-wreck calls)
+- Premature optimization that harms clarity; micro-benchmarks driving architecture
+
+## Exceptions and Special Cases
+- Hot-path duplication may be allowed when proven by profiling and when abstraction adds measurable overhead; document rationale and add a test covering both paths
+- Domain standards may allow well-known literals (e.g., HTTP status codes) but prefer named constants
+- Short-lived boolean flags are acceptable in private helpers when the meaning is obvious at the call site and not propagated; refactor if they spread
+- Legacy migration may temporarily exceed budgets; add TODO with owner and deadline; prioritize paying the debt
+
+## Example Code
+```ts
+// Replace boolean flag with options object
+// Before
+function renderList(items: Item[], isCompact: boolean) {
+  if (isCompact) return renderCompact(items);
+  return renderComfortable(items);
+}
+
+// After
+type RenderMode = 'compact' | 'comfortable';
+function renderList(items: Item[], options: { mode: RenderMode }) {
+  return options.mode === 'compact' ? renderCompact(items) : renderComfortable(items);
+}
+
+// Flatten deep nesting with guard clauses
+function process(order: Order) {
+  if (!order) throw new Error('order required');
+  if (!order.items.length) return { status: 'empty' } as const;
+  if (!isAuthorized(order.userId)) return { status: 'unauthorized' } as const;
+  return fulfill(order);
+}
+
+// Extract value object for data clump
+class Money {
+  constructor(public readonly amountInCents: number, public readonly currency: 'USD' | 'CNY') {}
+  add(other: Money): Money {
+    if (this.currency !== other.currency) throw new Error('currency mismatch');
+    return new Money(this.amountInCents + other.amountInCents, this.currency);
+  }
+}
+```
+
